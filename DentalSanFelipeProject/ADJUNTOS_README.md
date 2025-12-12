@@ -205,7 +205,7 @@ Si necesitas:
 - ✨ Envío de adjuntos por correo
 - ✨ Vinculación a consultas específicas (no solo expedientes)
 
-Solo avísame y lo implementamos.
+
 
 ---
 
