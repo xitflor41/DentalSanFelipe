@@ -1,0 +1,41 @@
+{
+  "name": "dentalsanfelipe-backend",
+  "version": "1.0.0",
+  "description": "Backend del sistema Dental San Felipe (API REST con Express.js)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "worker": "node src/workers/notification.worker.js",
+    "worker:dev": "nodemon src/workers/notification.worker.js",
+    "seed:admin": "node src/db/seed-admin.js",
+    "test:whatsapp": "node scripts/test-whatsapp.js",
+    "migrate": "docker exec -i mysql_dentalsanfelipe mysql -uroot -proot dental_sanfelipe < src/db/migrations/0001_complete_setup.sql",
+    "db:connect": "docker exec -it mysql_dentalsanfelipe mysql -uroot -proot dental_sanfelipe",
+    "db:backup": "docker exec mysql_dentalsanfelipe mysqldump -uroot -proot dental_sanfelipe > backup.sql",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker logs mysql_dentalsanfelipe",
+    "docker:restart": "docker-compose restart"
+  },
+  "keywords": [],
+  "author": "Flores Salcedo Xitlalic Guadalupe",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-validator": "^7.3.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.3",
+    "twilio": "^5.10.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
