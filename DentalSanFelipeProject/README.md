@@ -77,7 +77,7 @@ DentalSanFelipeProject/
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/TU-USUARIO/DentalSanFelipeProject.git
+git clone https://github.com/xitflor41/DentalSanFelipeProject.git
 cd DentalSanFelipeProject
 
 # 2. Configurar variables de entorno (opcional)
@@ -94,7 +94,7 @@ docker-compose up -d
 #### Opción B: Descarga Directa (Sin Git)
 
 1. **Descarga el proyecto**: 
-   - Ve a https://github.com/TU-USUARIO/DentalSanFelipeProject
+   - Ve a https://github.com/xitflor41/DentalSanFelipeProject
    - Click en "Code" → "Download ZIP"
    - Extrae el archivo ZIP
 
@@ -116,7 +116,7 @@ docker-compose up -d
 **Windows:**
 ```powershell
 # Descargar e instalar automáticamente
-git clone https://github.com/TU-USUARIO/DentalSanFelipeProject.git
+git clone https://github.com/xitflor41/DentalSanFelipeProject.git
 cd DentalSanFelipeProject
 .\install.bat
 ```
@@ -124,7 +124,7 @@ cd DentalSanFelipeProject
 **Linux/Mac:**
 ```bash
 # Descargar e instalar automáticamente
-git clone https://github.com/TU-USUARIO/DentalSanFelipeProject.git
+git clone https://github.com/xitflor41/DentalSanFelipeProject.git
 cd DentalSanFelipeProject
 chmod +x install.sh
 ./install.sh
@@ -199,7 +199,7 @@ El sistema incluye 3 contenedores Docker:
 
 ```bash
 # Clonar el repositorio completo
-git clone https://github.com/TU-USUARIO/DentalSanFelipeProject.git
+git clone https://github.com/xitflor41/DentalSanFelipeProject.git
 cd DentalSanFelipeProject
 
 # Configurar
@@ -220,7 +220,7 @@ docker-compose up -d
 
 ```bash
 # 1. Descargar ZIP desde GitHub
-https://github.com/TU-USUARIO/DentalSanFelipeProject/archive/refs/heads/main.zip
+https://github.com/xitflor41/DentalSanFelipeProject/archive/refs/heads/main.zip
 
 # 2. Extraer y entrar a la carpeta
 cd DentalSanFelipeProject-main
@@ -241,11 +241,11 @@ docker-compose up -d
 # 1. Hacer Fork en GitHub (click en "Fork")
 
 # 2. Clonar TU fork
-git clone https://github.com/TU-USUARIO/DentalSanFelipeProject.git
+git clone https://github.com/xitflor41/DentalSanFelipeProject.git
 cd DentalSanFelipeProject
 
 # 3. Agregar repositorio original como upstream
-git remote add upstream https://github.com/USUARIO-ORIGINAL/DentalSanFelipeProject.git
+git remote add upstream https://github.com/xitflor41/DentalSanFelipeProject.git
 
 # 4. Desarrollar
 git checkout -b mi-nueva-funcionalidad
@@ -253,13 +253,6 @@ git checkout -b mi-nueva-funcionalidad
 git commit -am "Descripción de cambios"
 git push origin mi-nueva-funcionalidad
 ```
-
-**Ventajas:**
-- ✅ Puedes hacer cambios sin afectar el original
-- ✅ Fácil crear Pull Requests
-- ✅ Mantener tu versión personalizada
-
----
 
 ## 📦 Actualizar el Sistema
 
@@ -914,9 +907,9 @@ Si encuentras un error:
 ### 💬 Contacto
 
 Para preguntas o sugerencias:
-- 📧 Email: [tu-email@ejemplo.com]
-- 🐙 GitHub Issues: [Abrir issue](https://github.com/TU-USUARIO/DentalSanFelipeProject/issues)
-- 💼 LinkedIn: [Tu perfil]
+- 📧 Email: xitlalic.1403.flores@gmail.com
+- 🐙 GitHub Issues: [Abrir issue](https://github.com/xitflor41/DentalSanFelipeProject/issues)
+- 💼 LinkedIn: https://www.linkedin.com/in/xitlalic-guadalupe-flores-salcedo-b275bb2b9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
 
 ---
 
