@@ -109,13 +109,12 @@ Abre una terminal (PowerShell, CMD, o Terminal) y ejecuta:
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/TU-USUARIO/DentalSanFelipeProject.git
+git clone https://github.com/xitflor41/DentalSanFelipeProject.git
 
 # Entrar a la carpeta
 cd DentalSanFelipeProject
 ```
 
-> **Nota**: Reemplaza `TU-USUARIO` con tu nombre de usuario de GitHub
 
 ### Paso 2: Instalar Dependencias del Backend
 
@@ -1045,6 +1044,6 @@ Hecho con ❤️ para mejorar la gestión de clínicas dentales
 
 ⭐ Si este proyecto te es útil, dale una estrella en GitHub
 
-[Reportar Bug](https://github.com/TU-USUARIO/DentalSanFelipeProject/issues) • [Solicitar Feature](https://github.com/TU-USUARIO/DentalSanFelipeProject/issues) • [Ver Documentación](https://github.com/TU-USUARIO/DentalSanFelipeProject)
+[Reportar Bug](https://github.com/xitflor41/DentalSanFelipeProject/issues) • [Solicitar Feature](https://github.com/xitflor41/DentalSanFelipeProject/issues) • [Ver Documentación](https://github.com/xitflor41/DentalSanFelipeProject)
 
 </div>
