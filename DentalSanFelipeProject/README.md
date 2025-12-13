@@ -1,966 +1,1050 @@
-# 🦷 Dental San Felipe - Sistema de Gestión Dental
+# 🦷 Sistema de Gestión Dental San Felipe
 
-Sistema completo de gestión para clínicas dentales desarrollado con Angular, Node.js/Express y MySQL.
+Sistema completo de gestión para clínicas dentales con Angular, Node.js y MySQL.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)
 ![Node](https://img.shields.io/badge/node-20.x-green.svg)
 ![Angular](https://img.shields.io/badge/angular-20.3-red.svg)
+![MySQL](https://img.shields.io/badge/mysql-8.0-blue.svg)
+
+---
 
 ## 📋 Tabla de Contenidos
 
 - [Características](#-características)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Instalación Rápida](#-instalación-rápida-con-docker)
-- [Configuración](#️-configuración)
-- [Actualizar el Sistema](#-actualizar-el-sistema)
-- [Comandos Útiles](#️-comandos-útiles)
-- [Notificaciones WhatsApp](#-notificaciones-por-whatsapp)
-- [Soporte y Contribución](#-soporte-y-contribución)
+- [Requisitos Previos](#-requisitos-previos)
+- [Instalación desde Cero](#-instalación-desde-cero)
+- [Configuración de la Base de Datos](#-configuración-de-la-base-de-datos)
+- [Configuración del Sistema](#️-configuración-del-sistema)
+- [Ejecutar el Sistema](#-ejecutar-el-sistema)
+- [Primer Acceso](#-primer-acceso)
+- [Notificaciones WhatsApp](#-notificaciones-whatsapp-opcional)
+- [Permisos por Rol](#️-permisos-por-rol)
+- [Solución de Problemas](#-solución-de-problemas)
 
 ---
 
 ## ✨ Características
 
 - ✅ **Gestión de Pacientes**: Registro completo con historial clínico
-- ✅ **Sistema de Citas**: Calendario interactivo con disponibilidad
+- ✅ **Sistema de Citas**: Programación y seguimiento de citas
 - ✅ **Control de Acceso**: 3 roles (Administrador, Odontólogo, Auxiliar)
-- ✅ **Notificaciones WhatsApp**: Confirmación automática de citas vía Twilio
-- ✅ **Docker**: Despliegue en contenedores (MySQL + Backend + Frontend)
-- ✅ **Seguridad**: JWT tokens, validación de roles, soft delete
-- ✅ **Responsive**: Interfaz adaptable a móviles y tablets
+- ✅ **Expedientes Clínicos**: Historial médico, odontogramas, consultas
+- ✅ **Tratamientos**: Registro de procedimientos y medicamentos
+- ✅ **Notificaciones WhatsApp**: Confirmación automática de citas (opcional)
+- ✅ **Seguridad**: Autenticación JWT, permisos granulares por rol
+- ✅ **Auditoría**: Registro de todas las operaciones clínicas
 
 ---
 
-## 📁 Estructura del Proyecto
+## 📦 Requisitos Previos
 
+Antes de comenzar, necesitas tener instalado en tu computadora:
+
+### 1. Node.js (v20 o superior)
+
+**Descargar**: https://nodejs.org/
+
+Verifica la instalación abriendo una terminal:
+```bash
+node --version
+npm --version
 ```
-DentalSanFelipeProject/
-├── dentalSanFelipe-backend/     # API REST con Node.js/Express
-│   ├── src/
-│   │   ├── controllers/         # Lógica de negocio
-│   │   ├── routes/              # Endpoints API
-│   │   ├── services/            # Servicios (WhatsApp, auth, etc.)
-│   │   ├── middlewares/         # Auth, validación, errores
-│   │   └── config/              # Configuración DB y env
-│   ├── Dockerfile               # Imagen Docker backend
-│   └── package.json
-│
-├── dentalSanFelipe-frontend/    # Aplicación Angular
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── pages/           # Páginas principales
-│   │   │   ├── core/            # Guards, interceptors, services
-│   │   │   └── components/      # Componentes reutilizables
-│   │   └── index.html
-│   ├── Dockerfile               # Imagen Docker frontend
-│   ├── nginx.conf               # Configuración Nginx
-│   └── angular.json
-│
-├── docker-compose.yml           # Orquestación de contenedores
-├── .env.example                 # Plantilla de variables de entorno
-└── README.md                    # Este archivo
+
+Deberías ver algo como:
 ```
+v20.x.x
+10.x.x
+```
+
+### 2. Git
+
+**Descargar**: https://git-scm.com/downloads
+
+Verifica la instalación:
+```bash
+git --version
+```
+
+### 3. MySQL 8.0
+
+Elige **UNA** de estas opciones:
+
+#### Opción A: MySQL con Docker (Recomendado) ⭐
+
+**Requisito**: Docker Desktop instalado  
+**Descargar**: https://www.docker.com/products/docker-desktop
+
+**Ventajas**:
+- ✅ Instalación rápida y limpia
+- ✅ No afecta otras instalaciones de MySQL
+- ✅ Fácil de eliminar completamente
+- ✅ Mismo entorno en todas las máquinas
+
+#### Opción B: XAMPP
+
+**Descargar**: https://www.apachefriends.org/
+
+**Ventajas**:
+- ✅ Incluye MySQL y phpMyAdmin
+- ✅ Interfaz gráfica fácil de usar
+- ✅ Todo en uno
+- ✅ Ideal para desarrollo local
+
+#### Opción C: MySQL Instalación Nativa
+
+**Descargar**: https://dev.mysql.com/downloads/installer/
+
+**Ventajas**:
+- ✅ Instalación completa de MySQL
+- ✅ Control total del servidor
+- ✅ Mejor para servidores de producción
 
 ---
 
-## 🚀 Instalación Rápida con Docker
+## 🚀 Instalación desde Cero
 
-### Prerequisitos
+### Paso 1: Descargar el Proyecto
 
-- **Docker Desktop** instalado ([Descargar aquí](https://www.docker.com/products/docker-desktop))
-- **Git** instalado (opcional) ([Descargar aquí](https://git-scm.com/downloads))
-
-### Instalación en 3 Pasos
-
-#### Opción A: Usando Git (Recomendado)
+Abre una terminal (PowerShell, CMD, o Terminal) y ejecuta:
 
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/xitflor41/DentalSanFelipeProject.git
+# Clonar el repositorio
+git clone https://github.com/TU-USUARIO/DentalSanFelipeProject.git
+
+# Entrar a la carpeta
 cd DentalSanFelipeProject
-
-# 2. Configurar variables de entorno (opcional)
-# En Windows:
-copy .env.example .env
-
-# En Linux/Mac:
-cp .env.example .env
-
-# 3. Iniciar todos los servicios
-docker-compose up -d
 ```
 
-#### Opción B: Descarga Directa (Sin Git)
+> **Nota**: Reemplaza `TU-USUARIO` con tu nombre de usuario de GitHub
 
-1. **Descarga el proyecto**: 
-   - Ve a https://github.com/xitflor41/DentalSanFelipeProject
-   - Click en "Code" → "Download ZIP"
-   - Extrae el archivo ZIP
+### Paso 2: Instalar Dependencias del Backend
 
-2. **Abre una terminal** en la carpeta extraída
+```bash
+cd dentalSanFelipe-backend
+npm install
+```
 
-3. **Configura y ejecuta**:
-   ```bash
-   # Windows
-   copy .env.example .env
-   docker-compose up -d
+Verás muchos paquetes instalándose. Espera a que termine (puede tardar 1-2 minutos).
 
-   # Linux/Mac
-   cp .env.example .env
-   docker-compose up -d
-   ```
+```bash
+cd ..
+```
 
-#### Opción C: Instalación con Script Automático
+### Paso 3: Instalar Dependencias del Frontend
 
-**Windows:**
-```powershell
-# Descargar e instalar automáticamente
-git clone https://github.com/xitflor41/DentalSanFelipeProject.git
-cd DentalSanFelipeProject
-.\install.bat
+```bash
+cd dentalSanFelipe-frontend
+npm install
+```
+
+También tomará 1-2 minutos.
+
+```bash
+cd ..
+```
+
+---
+
+## 🗄️ Configuración de la Base de Datos
+
+Elige la opción que instalaste en los requisitos previos:
+
+<details>
+<summary><b>Opción A: MySQL con Docker (Click para expandir)</b></summary>
+
+### Paso 1: Crear contenedor de MySQL
+
+Abre una terminal y ejecuta:
+
+**Windows (PowerShell/CMD):**
+```bash
+docker run --name dental-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dental_sanfelipe -p 3306:3306 -d mysql:8.0
 ```
 
 **Linux/Mac:**
 ```bash
-# Descargar e instalar automáticamente
-git clone https://github.com/xitflor41/DentalSanFelipeProject.git
-cd DentalSanFelipeProject
-chmod +x install.sh
-./install.sh
+docker run --name dental-mysql \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=dental_sanfelipe \
+  -p 3306:3306 \
+  -d mysql:8.0
 ```
 
-**¡Listo!** Espera 1-2 minutos mientras se construyen y arrancan los contenedores.
+### Paso 2: Esperar que MySQL inicie
 
-### 🎯 Acceso a la Aplicación
-
-Abre tu navegador en:
-
-- **Frontend (Interfaz)**: http://localhost:4200
-- **Backend (API)**: http://localhost:3000
-- **Base de Datos**: localhost:3306
-
-### 👤 Usuario por Defecto
-
-```
-Usuario: admin
-Contraseña: Admin123!
-```
-
-## 📦 Servicios Incluidos
-
-El sistema incluye 3 contenedores Docker:
-
-1. **Frontend** (Angular + Nginx) - Puerto 4200
-2. **Backend** (Node.js + Express) - Puerto 3000
-3. **Base de Datos** (MySQL 8.0) - Puerto 3306
-
-## 📋 Características Principales
-
-### 👥 Gestión de Usuarios (3 Roles)
-- **Administrador**: Gestión completa del sistema, usuarios, configuración
-- **Odontólogo**: Gestión clínica completa, expedientes, tratamientos
-- **Auxiliar**: Visualización y soporte administrativo
-
-### 🏥 Módulos Clínicos
-- **Pacientes**: Registro completo con historia clínica
-- **Expedientes**: Odontograma, historia clínica, observaciones
-- **Consultas**: Registro detallado de cada visita
-- **Tratamientos**: Planificación y seguimiento
-- **Procedimientos**: Catálogo configurable
-
-### 📅 Gestión de Citas
-- Calendario de citas
-- Estados: Programada, Completada, Cancelada
-- Recordatorios automáticos por WhatsApp 24h antes
-
-### 📱 Notificaciones WhatsApp
-- Envío automático de recordatorios
-- Integración con Twilio WhatsApp API
-- Sistema de reintentos y logs
-- Modo simulación para desarrollo
-
-### 📎 Adjuntos
-- Subida de radiografías y documentos
-- Formatos: JPG, PNG, WEBP, PDF
-- Límite: 10MB por archivo
-- Almacenamiento en filesystem
-
-### 📊 Auditoría
-- Log completo de todas las operaciones
-- Timeline visual de cambios
-- Estadísticas de uso
-
----
-
-## 📥 Métodos de Instalación Detallados
-
-### 1️⃣ Desde GitHub (Desarrollo y Producción)
+MySQL tarda aproximadamente 30 segundos en estar listo. Verifica que está corriendo:
 
 ```bash
-# Clonar el repositorio completo
-git clone https://github.com/xitflor41/DentalSanFelipeProject.git
-cd DentalSanFelipeProject
-
-# Configurar
-cp .env.example .env
-nano .env  # o usa notepad .env en Windows
-
-# Iniciar
-docker-compose up -d
+docker ps
 ```
 
-**Ventajas:**
-- ✅ Siempre tienes la última versión
-- ✅ Puedes hacer `git pull` para actualizar
-- ✅ Fácil contribuir con mejoras
-- ✅ Historial completo de cambios
+Deberías ver:
+```
+CONTAINER ID   IMAGE       STATUS          PORTS                    NAMES
+xxxxxxxxxx     mysql:8.0   Up 30 seconds   0.0.0.0:3306->3306/tcp   dental-mysql
+```
 
-### 2️⃣ Descarga Rápida (Sin Git)
+### Paso 3: Importar la base de datos
 
 ```bash
-# 1. Descargar ZIP desde GitHub
-https://github.com/xitflor41/DentalSanFelipeProject/archive/refs/heads/main.zip
+# Copiar el archivo SQL al contenedor
+docker cp dentalSanFelipe-backend/src/db/dental_sanfelipe.sql dental-mysql:/dental_sanfelipe.sql
 
-# 2. Extraer y entrar a la carpeta
-cd DentalSanFelipeProject-main
-
-# 3. Configurar e iniciar
-copy .env.example .env
-docker-compose up -d
+# Importar la base de datos
+docker exec -i dental-mysql mysql -uroot -proot dental_sanfelipe < dentalSanFelipe-backend/src/db/dental_sanfelipe.sql
 ```
 
-**Ventajas:**
-- ✅ No necesitas Git
-- ✅ Instalación más rápida
-- ✅ Ideal para usuarios finales
+Si no da errores, ¡la base de datos está lista! ✅
 
-### 3️⃣ Fork para Desarrollo
+### Comandos útiles de Docker
 
 ```bash
-# 1. Hacer Fork en GitHub (click en "Fork")
+# Iniciar MySQL (si está detenido)
+docker start dental-mysql
 
-# 2. Clonar TU fork
-git clone https://github.com/xitflor41/DentalSanFelipeProject.git
-cd DentalSanFelipeProject
-
-# 3. Agregar repositorio original como upstream
-git remote add upstream https://github.com/xitflor41/DentalSanFelipeProject.git
-
-# 4. Desarrollar
-git checkout -b mi-nueva-funcionalidad
-# ... hacer cambios ...
-git commit -am "Descripción de cambios"
-git push origin mi-nueva-funcionalidad
-```
-
-## 📦 Actualizar el Sistema
-
-### Desde GitHub
-
-```bash
-# Detener servicios
-docker-compose down
-
-# Guardar tus cambios (si los tienes)
-git stash
-
-# Actualizar código
-git pull origin main
-
-# Restaurar tus cambios
-git stash pop
-
-# Reconstruir y reiniciar
-docker-compose build
-docker-compose up -d
-```
-
-### Desde ZIP
-
-1. Descarga la nueva versión del repositorio
-2. Detén los contenedores: `docker-compose down`
-3. **NO ELIMINES** el archivo `.env` (conserva tu configuración)
-4. Reemplaza todos los archivos excepto `.env`
-5. Reconstruye: `docker-compose build`
-6. Inicia: `docker-compose up -d`
-
----
-
-## 🛠️ Comandos Útiles
-
-```bash
-# Iniciar todos los servicios
-docker-compose up -d
-
-# Ver logs en tiempo real
-docker-compose logs -f
-
-# Ver logs de un servicio específico
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f mysql
-
-# Detener todos los servicios
-docker-compose down
-
-# Detener y eliminar volúmenes (¡CUIDADO! Borra la base de datos)
-docker-compose down -v
-
-# Reiniciar un servicio
-docker-compose restart backend
-
-# Reconstruir imágenes
-docker-compose build
-docker-compose up -d --build
-
-# Ver estado de los servicios
-docker-compose ps
-
-# Acceder al contenedor del backend
-docker exec -it dental_backend sh
-
-# Acceder a MySQL
-docker exec -it dental_mysql mysql -uroot -prootpassword dental_sanfelipe
-```
-
-## ⚙️ Configuración
-
-### Variables de Entorno
-
-El archivo `.env.example` contiene todas las variables configurables:
-
-```env
-# Puertos
-FRONTEND_PORT=4200
-BACKEND_PORT=3000
-DB_PORT=3306
-
-# Base de datos
-DB_NAME=dental_sanfelipe
-DB_USER=dentaluser
-DB_PASSWORD=dentalpass
-
-# Seguridad (CAMBIAR EN PRODUCCIÓN)
-JWT_SECRET=tu_clave_secreta_aqui
-JWT_REFRESH_SECRET=tu_clave_refresh_aqui
-
-# WhatsApp (opcional)
-WHATSAPP_ENABLED=false
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-TWILIO_WHATSAPP_FROM=
-```
-
-### Activar Notificaciones de WhatsApp
-
-1. Crear cuenta en [Twilio](https://www.twilio.com/try-twilio) (incluye $15 gratis)
-2. Configurar WhatsApp Sandbox
-3. Actualizar variables en `.env`:
-   ```env
-   WHATSAPP_ENABLED=true
-   TWILIO_ACCOUNT_SID=ACxxxxxxxxxx
-   TWILIO_AUTH_TOKEN=xxxxxxxxxx
-   TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
-   ```
-4. Reiniciar: `docker-compose restart backend`
-
-📖 **Guía completa**: [ACTIVAR_WHATSAPP.md](./dentalSanFelipe-backend/ACTIVAR_WHATSAPP.md)
-
-## 📊 Backup de Base de Datos
-
-### Crear Backup
-
-```bash
-# Backup completo
-docker exec dental_mysql mysqldump -uroot -prootpassword dental_sanfelipe > backup_$(date +%Y%m%d_%H%M%S).sql
-
-# Backup solo estructura
-docker exec dental_mysql mysqldump -uroot -prootpassword --no-data dental_sanfelipe > estructura.sql
-```
-
-### Restaurar Backup
-
-```bash
-docker exec -i dental_mysql mysql -uroot -prootpassword dental_sanfelipe < backup.sql
-```
-
-## 🔐 Roles y Permisos
-
-### Administrador
-- ✅ Acceso total al sistema
-- ✅ Gestión de usuarios
-- ✅ Ver todos los pacientes
-- ✅ Eliminar registros
-
-### Odontólogo
-- ✅ Ver solo pacientes asignados
-- ✅ Crear y editar citas
-- ✅ Gestionar expedientes
-- ✅ Realizar consultas
-- ❌ No puede eliminar
-
-### Auxiliar
-- ✅ Ver datos limitados de pacientes
-- ✅ Crear pacientes
-- ✅ Agendar citas
-- ❌ Solo lectura en procedimientos
-- ❌ No puede editar ni eliminar
-
-## 🐛 Solución de Problemas
-
-### Error: Puerto ya en uso
-
-```bash
-# Cambiar puertos en .env
-FRONTEND_PORT=8080
-BACKEND_PORT=5000
-DB_PORT=3307
-
-# Reiniciar
-docker-compose down
-docker-compose up -d
-```
-
-### Error: Conexión a base de datos fallida
-
-```bash
-# Verificar que MySQL esté corriendo
-docker-compose ps
+# Detener MySQL
+docker stop dental-mysql
 
 # Ver logs de MySQL
-docker-compose logs mysql
+docker logs dental-mysql
 
-# Reiniciar servicio
-docker-compose restart mysql
+# Acceder a MySQL desde terminal
+docker exec -it dental-mysql mysql -uroot -proot dental_sanfelipe
+
+# Eliminar contenedor (¡cuidado! elimina todos los datos)
+docker stop dental-mysql
+docker rm dental-mysql
 ```
 
-### Los cambios en .env no se aplican
+### Configuración del Backend
 
-```bash
-# Recrear contenedores
-docker-compose down
-docker-compose up -d
-```
-
-### Frontend muestra error de conexión
-
-1. Verificar que el backend esté corriendo: http://localhost:3000
-2. Ver logs: `docker-compose logs backend`
-3. Verificar que MySQL esté saludable: `docker-compose ps`
-
----
-
-## 🛠️ Stack Tecnológico
-
-### Backend
-- **Node.js** 20+ con Express
-- **MySQL** 8.0 (Docker)
-- **JWT** para autenticación
-- **Bcrypt** para contraseñas
-- **Multer** para archivos
-- **Twilio** para WhatsApp
-
-### Frontend
-- **Angular** 20.3.10
-- **Standalone Components**
-- **Signals API**
-- **TypeScript**
-- **RxJS**
-
----
-
-## 🚀 Instalación Rápida
-
-### Prerrequisitos
-```bash
-# Verificar versiones
-node --version  # v18.0.0 o superior
-npm --version   # v9.0.0 o superior
-docker --version # v20.0.0 o superior
-```
-
-### 1. Clonar Repositorio
-```bash
-git clone <repository-url>
-cd DentalSanFelipeProject
-```
-
-### 2. Configurar Backend
-
-```bash
-cd dentalSanFelipe-backend
-
-# Instalar dependencias
-npm install
-
-# Copiar archivo de configuración
-copy .env.example .env
-
-# Editar .env con tus configuraciones
-# notepad .env  (Windows)
-# nano .env     (Linux/Mac)
-```
-
-#### Variables importantes en `.env`:
+El `.env` ya viene configurado para Docker con:
 ```env
-# Base de datos (si usas Docker, estos valores están OK)
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
 DB_PASS=root
 DB_NAME=dental_sanfelipe
+```
 
-# JWT Secrets (CAMBIAR EN PRODUCCIÓN)
+</details>
+
+<details>
+<summary><b>Opción B: MySQL con XAMPP (Click para expandir)</b></summary>
+
+### Paso 1: Iniciar XAMPP
+
+1. Abre **XAMPP Control Panel**
+2. Click en **Start** junto a **MySQL**
+3. Espera a que se ponga en verde
+4. Click en **Admin** (abre phpMyAdmin en el navegador)
+
+### Paso 2: Crear la base de datos
+
+En phpMyAdmin:
+
+1. Click en **Nueva** (o **New**) en el panel izquierdo
+2. Nombre de base de datos: `dental_sanfelipe`
+3. Cotejamiento: `utf8mb4_general_ci`
+4. Click en **Crear**
+
+### Paso 3: Importar la estructura
+
+1. Selecciona la base de datos `dental_sanfelipe` en el panel izquierdo
+2. Click en la pestaña **Importar** (o **Import**)
+3. Click en **Seleccionar archivo**
+4. Navega a: `DentalSanFelipeProject/dentalSanFelipe-backend/src/db/dental_sanfelipe.sql`
+5. Click en **Continuar** (o **Go**)
+6. Espera a ver: **Importación finalizada exitosamente**
+
+### Paso 4: Configurar el Backend
+
+Edita el archivo `dentalSanFelipe-backend/.env`:
+
+**Cambiar:**
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASS=root              # ← CAMBIAR A VACÍO
+DB_NAME=dental_sanfelipe
+```
+
+**A:**
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASS=                  # ← SIN CONTRASEÑA (vacío)
+DB_NAME=dental_sanfelipe
+```
+
+> **Nota**: XAMPP por defecto no tiene contraseña para root
+
+</details>
+
+<details>
+<summary><b>Opción C: MySQL Instalación Nativa (Click para expandir)</b></summary>
+
+### Paso 1: Crear la base de datos
+
+Abre una terminal y conéctate a MySQL:
+
+```bash
+mysql -u root -p
+```
+
+Te pedirá la contraseña que configuraste durante la instalación.
+
+Dentro de MySQL, ejecuta:
+
+```sql
+CREATE DATABASE dental_sanfelipe CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+exit;
+```
+
+### Paso 2: Importar la estructura
+
+```bash
+mysql -u root -p dental_sanfelipe < dentalSanFelipe-backend/src/db/dental_sanfelipe.sql
+```
+
+Te pedirá la contraseña nuevamente. Si no da errores, ¡listo! ✅
+
+### Paso 3: Configurar el Backend
+
+Edita el archivo `dentalSanFelipe-backend/.env` y actualiza la contraseña:
+
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASS=TU_CONTRASEÑA_AQUI    # ← Tu contraseña de MySQL
+DB_NAME=dental_sanfelipe
+```
+
+</details>
+
+---
+
+## ⚙️ Configuración del Sistema
+
+### Paso 1: Configurar el Backend
+
+Si aún no existe, crea el archivo `.env` desde el ejemplo:
+
+**Windows (PowerShell/CMD):**
+```bash
+cd dentalSanFelipe-backend
+copy .env.example .env
+cd ..
+```
+
+**Linux/Mac:**
+```bash
+cd dentalSanFelipe-backend
+cp .env.example .env
+cd ..
+```
+
+### Paso 2: Revisar/Editar `.env`
+
+Abre el archivo `dentalSanFelipe-backend/.env` con un editor de texto (Notepad, VSCode, etc.)
+
+**Configuración mínima necesaria:**
+
+```env
+# ==========================================
+# SERVIDOR
+# ==========================================
+PORT=3000
+NODE_ENV=development
+
+# ==========================================
+# BASE DE DATOS
+# ==========================================
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASS=root              # Ajusta según tu instalación
+DB_NAME=dental_sanfelipe
+
+# ==========================================
+# SEGURIDAD JWT
+# ==========================================
 JWT_SECRET=tu_clave_secreta_jwt_muy_segura_cambiala_en_produccion
-JWT_REFRESH_SECRET=tu_clave_secreta_refresh_jwt_muy_segura_cambiala_en_produccion
+JWT_REFRESH_SECRET=tu_clave_secreta_refresh_jwt_muy_segura
 
-# WhatsApp (ver WHATSAPP_SETUP.md para detalles)
-WHATSAPP_SIMULATION_MODE=true
-TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-TWILIO_AUTH_TOKEN=tu_auth_token_aqui
+# Duración de sesión: 15m, 30m, 1h, 2h, 8h, 12h, 24h
+JWT_EXPIRES_IN=8h
+JWT_REFRESH_EXPIRES_IN=7d
+
+# ==========================================
+# CONTRASEÑA ADMIN INICIAL
+# ==========================================
+SEED_ADMIN_PASS=Admin123!
+
+# ==========================================
+# WHATSAPP (Opcional - por ahora déjalo así)
+# ==========================================
+WHATSAPP_ENABLED=false
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
+
+# ==========================================
+# FRONTEND
+# ==========================================
+FRONTEND_URL=http://localhost:4200
 ```
 
-### 3. Iniciar Base de Datos (Docker)
+> **Importante**: Si usas XAMPP, `DB_PASS` debe estar vacío
 
-```bash
-# Iniciar MySQL en Docker
-docker-compose up -d
-
-# Verificar que esté corriendo
-docker ps
-
-# Esperar 10 segundos para que MySQL inicie completamente
-```
-
-### 4. Ejecutar Migraciones
-
-```bash
-# Copiar script de migración al contenedor
-docker cp src/db/migrations/0001_complete_setup.sql mysql_dentalsanfelipe:/tmp/
-
-# Ejecutar migración
-docker exec -i mysql_dentalsanfelipe mysql -uroot -proot dental_sanfelipe < /tmp/0001_complete_setup.sql
-```
-
-### 5. Crear Usuario Administrador
-
-```bash
-# Ejecutar seed
-node src/db/seed-admin.js
-```
-
-Credenciales por defecto:
-- **Usuario**: `admin`
-- **Contraseña**: `Admin123!`
-
-### 6. Iniciar Backend
-
-```bash
-npm run dev
-# o
-node server.js
-```
-
-El servidor estará en: `http://localhost:3000`
-
-### 7. Configurar Frontend
-
-```bash
-cd ../dentalSanFelipe-frontend
-
-# Instalar dependencias
-npm install
-
-# Verificar que apunte al backend correcto
-# Editar src/app/core/services/*.service.ts si es necesario
-# API_URL debe ser: http://localhost:3000/api
-
-# Iniciar servidor de desarrollo
-npm start
-```
-
-El frontend estará en: `http://localhost:4200`
-
-### 8. Iniciar Worker de Notificaciones (Opcional)
-
-En una nueva terminal:
+### Paso 3: Crear el Usuario Administrador
 
 ```bash
 cd dentalSanFelipe-backend
-node src/workers/notification.worker.js
-```
-
----
-
-## 🧪 Probar el Sistema
-
-### 1. Iniciar Sesión
-- Ve a `http://localhost:4200`
-- Usuario: `admin`
-- Contraseña: `Admin123!`
-
-### 2. Crear Usuarios
-- Ve a **Usuarios** (solo visible para admin)
-- Crea un Odontólogo
-- Crea un Auxiliar
-
-### 3. Crear Paciente
-- Ve a **Pacientes** → **Crear**
-- **IMPORTANTE**: Incluye número de teléfono para notificaciones WhatsApp
-- Formato: `+52XXXXXXXXXX` (con código de país)
-
-### 4. Crear Expediente
-- Ve al paciente creado
-- Click en **Ver Expediente**
-- Rellena historia clínica, odontograma, etc.
-
-### 5. Crear Cita
-- Ve a **Citas** → **Crear**
-- Selecciona el paciente
-- Programa una cita
-- ✅ Automáticamente se creará una notificación WhatsApp
-
-### 6. Verificar Notificación (Base de datos)
-
-```bash
-docker exec -it mysql_dentalsanfelipe mysql -uroot -proot
-
-USE dental_sanfelipe;
-
-SELECT * FROM notificaciones ORDER BY created_at DESC LIMIT 1;
+node src/db/seed-admin.js
 ```
 
 Deberías ver:
-- `telefono`: El del paciente
-- `mensaje`: Personalizado con nombre y fecha
-- `fecha_programada`: 24h antes de la cita
-- `enviado`: false (hasta que el worker la procese)
+```
+✅ Usuario administrador creado exitosamente
+Usuario: admin
+Contraseña: Admin123!
+Rol: administrador
+```
 
----
-
-## 📱 Configurar WhatsApp (Producción)
-
-Para enviar notificaciones reales por WhatsApp:
-
-1. **Lee la guía completa**: [WHATSAPP_SETUP.md](./WHATSAPP_SETUP.md)
-
-2. **Resumen rápido**:
-   - Crea cuenta en [Twilio](https://www.twilio.com/try-twilio)
-   - Copia credenciales a `.env`
-   - Conecta tu WhatsApp al sandbox (envía `join <palabra>`)
-   - Cambia `WHATSAPP_SIMULATION_MODE=false`
-   - Reinicia el worker
-
-3. **Instala dependencia**:
 ```bash
-npm install twilio
+cd ..
 ```
 
 ---
 
-## 🐳 Comandos Docker Útiles
+## ▶️ Ejecutar el Sistema
+
+Necesitas **2 terminales abiertas** (o 2 pestañas de terminal):
+
+### Terminal 1: Iniciar el Backend
 
 ```bash
-# Ver logs de MySQL
-docker logs mysql_dentalsanfelipe
+cd dentalSanFelipe-backend
+npm start
+```
 
-# Conectar a MySQL
-docker exec -it mysql_dentalsanfelipe mysql -uroot -proot dental_sanfelipe
+**Salida correcta:**
+```
+[dotenv@17.2.3] injecting env (21) from .env
+[WhatsApp] ℹ️ Twilio no configurado (usando credenciales de ejemplo)
+[WhatsApp] ℹ️ Para activar WhatsApp real, consulta ACTIVAR_WHATSAPP.md
+Servidor ejecutándose en http://localhost:3000
+```
 
-# Detener contenedor
-docker-compose down
+> ⚠️ **No cierres esta terminal**, deja el backend corriendo
 
-# Reiniciar limpio (CUIDADO: borra datos)
-docker-compose down -v
-docker-compose up -d
+### Terminal 2: Iniciar el Frontend
 
-# Backup de base de datos
-docker exec mysql_dentalsanfelipe mysqldump -uroot -proot dental_sanfelipe > backup_$(date +%Y%m%d).sql
+Abre **otra terminal nueva** y ejecuta:
 
-# Restaurar backup
-docker exec -i mysql_dentalsanfelipe mysql -uroot -proot dental_sanfelipe < backup_20251210.sql
+```bash
+cd dentalSanFelipe-frontend
+npm start
+```
+
+**Salida correcta:**
+```
+✔ Browser application bundle generation complete.
+
+Initial Chunk Files   | Names         |  Raw Size
+main.js               | main          | 2.50 MB   
+
+** Angular Live Development Server is listening on localhost:4200 **
+✔ Compiled successfully.
+```
+
+> ⚠️ **No cierres esta terminal**, deja el frontend corriendo
+
+---
+
+## 🔑 Primer Acceso
+
+### Paso 1: Abrir la Aplicación
+
+Abre tu navegador (Chrome, Firefox, Edge, etc.) en:
+
+**http://localhost:4200**
+
+Verás la página de login del sistema.
+
+### Paso 2: Iniciar Sesión
+
+Usa las credenciales por defecto:
+
+- **Usuario**: `admin`
+- **Contraseña**: `Admin123!`
+
+Click en **Iniciar Sesión**
+
+### Paso 3: ⚠️ IMPORTANTE - Cambiar Contraseña
+
+Después del primer acceso, **debes cambiar la contraseña**:
+
+1. Ve a **Usuarios** en el menú lateral
+2. Busca el usuario `admin`
+3. Click en **Editar**
+4. Cambia la contraseña por una segura
+5. Guarda los cambios
+
+### Paso 4: Crear Usuarios Adicionales
+
+Como administrador, puedes crear usuarios:
+
+1. Ve a **Usuarios** → **Crear Nuevo Usuario**
+2. Completa los datos:
+   - **Nombre y Apellido**
+   - **Correo electrónico**
+   - **Usuario** (para login)
+   - **Contraseña**
+   - **Rol**:
+     - **Administrador**: Acceso completo al sistema
+     - **Odontólogo**: Puede atender pacientes, crear expedientes y tratamientos
+     - **Auxiliar**: Puede ver información y agendar citas
+3. Click en **Guardar**
+
+---
+
+## 📱 Notificaciones WhatsApp (Opcional)
+
+Si deseas activar notificaciones automáticas cuando se crea una cita:
+
+<details>
+<summary><b>Configuración de WhatsApp con Twilio (Click para expandir)</b></summary>
+
+### Paso 1: Crear Cuenta en Twilio
+
+1. Ve a: https://www.twilio.com/
+2. Click en **Sign Up** (Registrarse)
+3. Completa el formulario
+4. **Verifica tu número de teléfono**
+
+### Paso 2: Obtener Credenciales
+
+Una vez en el dashboard de Twilio:
+
+1. Busca **Account SID** (empieza con `AC...`)
+2. Busca **Auth Token** (32 caracteres)
+3. Ve a **Messaging** → **Try it Out** → **Send a WhatsApp message**
+4. Copia el **WhatsApp Sandbox Number** (formato: `whatsapp:+14155238886`)
+
+### Paso 3: Configurar tu Número de WhatsApp
+
+1. En Twilio, ve a la sección de WhatsApp Sandbox
+2. Envía el código que te dan a su número de WhatsApp
+3. Espera la confirmación
+
+### Paso 4: Configurar en el Sistema
+
+Edita `dentalSanFelipe-backend/.env`:
+
+```env
+WHATSAPP_ENABLED=true
+TWILIO_ACCOUNT_SID=AC123456789abcdef...  # Tu Account SID real
+TWILIO_AUTH_TOKEN=tu_auth_token_real     # Tu Auth Token real
+TWILIO_WHATSAPP_FROM=whatsapp:+14155238886  # El número que te dieron
+```
+
+### Paso 5: Reiniciar el Backend
+
+En la terminal del backend, presiona `Ctrl + C` y luego:
+
+```bash
+npm start
+```
+
+Ahora deberías ver:
+```
+[WhatsApp] ✅ Cliente Twilio inicializado correctamente
+```
+
+### Paso 6: Probar
+
+1. Crea una cita para un paciente
+2. El paciente debería recibir un mensaje de WhatsApp con:
+   - Fecha y hora de la cita
+   - Nombre del dentista
+   - Motivo de la consulta
+
+</details>
+
+---
+
+## 🛡️ Permisos por Rol
+
+El sistema tiene control de acceso granular basado en roles:
+
+| Funcionalidad | Administrador | Odontólogo | Auxiliar |
+|---------------|:-------------:|:----------:|:--------:|
+| **Pacientes** |
+| Ver pacientes | ✅ Todos | ✅ Solo asignados | ✅ Solo asignados |
+| Crear pacientes | ✅ | ✅ Auto-asigna | ✅ |
+| Editar pacientes | ✅ Todos | ✅ Solo asignados | ❌ |
+| Eliminar pacientes | ✅ | ❌ | ❌ |
+| **Expedientes** |
+| Ver expedientes | ✅ Todos | ✅ De sus pacientes | ✅ De sus pacientes |
+| Crear expedientes | ✅ | ✅ | ✅ |
+| Editar expedientes | ✅ Todos | ✅ De sus pacientes | ❌ |
+| **Historia Clínica** |
+| Ver historia | ✅ Todas | ✅ De sus pacientes | ✅ De sus pacientes |
+| Crear/editar historia | ✅ | ✅ De sus pacientes | ✅ De sus pacientes |
+| **Tratamientos** |
+| Ver tratamientos | ✅ Todos | ✅ De sus pacientes | ✅ De sus pacientes |
+| Crear tratamientos | ✅ | ✅ De sus pacientes | ❌ |
+| Editar tratamientos | ✅ Todos | ✅ De sus pacientes | ❌ |
+| Eliminar tratamientos | ✅ | ✅ De sus pacientes | ❌ |
+| **Citas** |
+| Ver citas | ✅ Todas | ✅ De sus pacientes | ✅ De sus pacientes |
+| Crear citas | ✅ | ✅ | ✅ |
+| **Usuarios** |
+| Gestionar usuarios | ✅ | ❌ | ❌ |
+| **Procedimientos** |
+| Gestionar procedimientos | ✅ | ❌ | ❌ |
+
+**Nota**: Los pacientes se asignan a un odontólogo. Solo ese odontólogo (y los administradores) pueden ver/editar toda la información del paciente.
+
+---
+
+## 🔧 Solución de Problemas
+
+### ❌ Error: "Cannot connect to MySQL"
+
+**Síntomas**: Backend no inicia, muestra error de conexión a la base de datos
+
+**Solución**:
+
+1. **Verifica que MySQL esté corriendo:**
+
+   - **Docker**: 
+     ```bash
+     docker ps
+     ```
+     Debe aparecer `dental-mysql` con estado `Up`
+   
+   - **XAMPP**: 
+     Abre XAMPP Control Panel, MySQL debe estar en verde
+   
+   - **Instalación nativa**: 
+     Busca "Services" en Windows o verifica que el servicio MySQL esté activo
+
+2. **Verifica las credenciales en `.env`:**
+   ```env
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASS=tu_password  # Verifica que sea correcto
+   ```
+
+3. **Prueba la conexión manualmente:**
+   
+   - **Docker**:
+     ```bash
+     docker exec -it dental-mysql mysql -uroot -proot
+     ```
+   
+   - **XAMPP/Nativo**:
+     ```bash
+     mysql -u root -p
+     ```
+
+4. **Si Docker no inicia MySQL:**
+   ```bash
+   docker logs dental-mysql
+   ```
+   Revisa los logs para ver qué está fallando
+
+---
+
+### ❌ Error: "Port 3000 already in use"
+
+**Síntomas**: Backend no puede iniciar porque el puerto está ocupado
+
+**Solución**:
+
+**Opción 1**: Cambia el puerto en `.env`
+```env
+PORT=3001  # O cualquier puerto libre
+```
+
+**Opción 2**: Detén el proceso que usa el puerto 3000
+
+Windows:
+```bash
+netstat -ano | findstr :3000
+taskkill /PID <número_del_PID> /F
+```
+
+Linux/Mac:
+```bash
+lsof -ti:3000 | xargs kill
 ```
 
 ---
 
-## 📁 Estructura del Proyecto
+### ❌ Error: "Port 4200 already in use"
+
+**Síntomas**: Frontend no puede iniciar
+
+**Solución**:
+
+1. Detén todos los procesos de Angular:
+   
+   **Windows:**
+   ```bash
+   taskkill /F /IM node.exe /T
+   ```
+   
+   **Linux/Mac:**
+   ```bash
+   killall node
+   ```
+
+2. Vuelve a iniciar el frontend:
+   ```bash
+   npm start
+   ```
+
+---
+
+### ❌ Error: "Module not found" o "Cannot find module"
+
+**Síntomas**: Errores al iniciar backend o frontend
+
+**Solución**:
+
+Las dependencias no están instaladas correctamente.
+
+**Backend:**
+```bash
+cd dentalSanFelipe-backend
+rm -rf node_modules package-lock.json  # Eliminar todo
+npm install                              # Reinstalar
+```
+
+**Frontend:**
+```bash
+cd dentalSanFelipe-frontend
+rm -rf node_modules package-lock.json  # Eliminar todo
+npm install                              # Reinstalar
+```
+
+---
+
+### ❌ Página en blanco o "Cannot GET /"
+
+**Síntomas**: El navegador muestra página en blanco en http://localhost:4200
+
+**Solución**:
+
+1. Verifica que el frontend esté compilando:
+   ```bash
+   cd dentalSanFelipe-frontend
+   npm start
+   ```
+
+2. Espera a ver: `✔ Compiled successfully.`
+
+3. Si sigue sin funcionar, limpia caché:
+   ```bash
+   Ctrl + C  # Detener
+   npm install
+   npm start
+   ```
+
+---
+
+### ❌ "Credenciales inválidas" al hacer login
+
+**Síntomas**: No puedes iniciar sesión con admin/Admin123!
+
+**Solución**:
+
+El usuario admin no fue creado o hay problema en la BD.
+
+1. Recrea el usuario admin:
+   ```bash
+   cd dentalSanFelipe-backend
+   node src/db/seed-admin.js
+   ```
+
+2. Verifica que la base de datos tenga datos:
+   
+   **Docker:**
+   ```bash
+   docker exec -it dental-mysql mysql -uroot -proot
+   USE dental_sanfelipe;
+   SELECT * FROM usuarios;
+   ```
+   
+   Debe aparecer el usuario `admin`
+
+---
+
+### ❌ WhatsApp no envía mensajes
+
+**Síntomas**: Las citas se crean pero no llegan mensajes
+
+**Solución**:
+
+1. Verifica en `.env` que esté habilitado:
+   ```env
+   WHATSAPP_ENABLED=true
+   ```
+
+2. Verifica las credenciales:
+   ```env
+   TWILIO_ACCOUNT_SID=ACxxxxxxxx...  # Debe empezar con AC
+   TWILIO_AUTH_TOKEN=xxxxxxxx...     # 32 caracteres
+   ```
+
+3. Revisa los logs del backend:
+   
+   Si ves:
+   ```
+   [WhatsApp] ℹ️ Twilio no configurado
+   ```
+   
+   Las credenciales son inválidas.
+
+4. Si está en modo simulado, los mensajes aparecen en la consola del backend:
+   ```
+   [WhatsApp] 📱 Mensaje simulado (WHATSAPP_ENABLED=false):
+   Para: 5551234567
+   Mensaje: Hola Juan, tu cita está confirmada...
+   ```
+
+---
+
+### ❌ "Session expired" muy rápido
+
+**Síntomas**: Te saca del sistema cada pocos minutos
+
+**Solución**:
+
+El tiempo de sesión es muy corto.
+
+Edita `.env`:
+```env
+JWT_EXPIRES_IN=8h  # 8 horas (día laboral completo)
+```
+
+Opciones:
+- `15m` = 15 minutos (muy seguro, poco práctico)
+- `1h` = 1 hora
+- `2h` = 2 horas
+- `8h` = 8 horas (recomendado)
+- `24h` = 24 horas
+
+Reinicia el backend después de cambiar.
+
+---
+
+### ❌ No puedo ver pacientes siendo odontólogo/auxiliar
+
+**Síntomas**: Lista de pacientes vacía, pero como admin sí se ven
+
+**Solución**:
+
+Los pacientes no están asignados al odontólogo.
+
+1. Inicia sesión como **administrador**
+2. Ve a **Pacientes**
+3. Para cada paciente, click en **Editar**
+4. Selecciona el **Odontólogo Asignado**
+5. Guarda los cambios
+
+Ahora ese odontólogo podrá ver esos pacientes.
+
+---
+
+### ❌ Error al importar la base de datos
+
+**Síntomas**: Errores SQL al importar `dental_sanfelipe.sql`
+
+**Solución**:
+
+1. Verifica que la base de datos esté vacía:
+   ```sql
+   DROP DATABASE IF EXISTS dental_sanfelipe;
+   CREATE DATABASE dental_sanfelipe CHARACTER SET utf8mb4;
+   ```
+
+2. Importa nuevamente:
+   
+   **Docker:**
+   ```bash
+   docker exec -i dental-mysql mysql -uroot -proot dental_sanfelipe < dentalSanFelipe-backend/src/db/dental_sanfelipe.sql
+   ```
+   
+   **XAMPP/Nativo:**
+   ```bash
+   mysql -u root -p dental_sanfelipe < dentalSanFelipe-backend/src/db/dental_sanfelipe.sql
+   ```
+
+---
+
+## 📊 Estructura del Proyecto
 
 ```
 DentalSanFelipeProject/
-├── dentalSanFelipe-backend/
+├── dentalSanFelipe-backend/      # API REST (Node.js + Express)
 │   ├── src/
-│   │   ├── config/          # Configuraciones (DB, env)
-│   │   ├── controllers/     # Lógica de negocio
-│   │   ├── routes/          # Rutas de API
-│   │   ├── middlewares/     # Auth, upload, errors
-│   │   ├── services/        # Servicios reutilizables
-│   │   ├── workers/         # notification.worker.js
-│   │   └── db/
-│   │       ├── dental_sanfelipe.sql
-│   │       ├── seed-admin.js
-│   │       └── migrations/
-│   ├── uploads/adjuntos/    # Archivos subidos
-│   ├── .env                 # Configuración (NO subir a Git)
-│   ├── .env.example         # Plantilla de configuración
-│   ├── docker-compose.yml   # MySQL en Docker
-│   ├── package.json
-│   └── server.js
+│   │   ├── controllers/          # Lógica de negocio
+│   │   ├── routes/               # Definición de endpoints
+│   │   ├── services/             # WhatsApp, notificaciones
+│   │   ├── middlewares/          # Autenticación, validación
+│   │   ├── config/               # Configuración (DB, env)
+│   │   └── db/                   # SQL y scripts
+│   ├── scripts/                  # Scripts utilitarios
+│   ├── .env                      # Configuración (crear desde .env.example)
+│   ├── .env.example              # Plantilla de configuración
+│   ├── package.json              # Dependencias del backend
+│   └── server.js                 # Punto de entrada
 │
-└── dentalSanFelipe-frontend/
-    ├── src/
-    │   ├── app/
-    │   │   ├── core/
-    │   │   │   ├── guards/      # auth.guard.ts
-    │   │   │   ├── interceptors/ # auth.interceptor.ts
-    │   │   │   └── services/    # Servicios HTTP
-    │   │   ├── pages/
-    │   │   │   ├── login/
-    │   │   │   ├── dashboard/
-    │   │   │   ├── pacientes/
-    │   │   │   ├── appointments/
-    │   │   │   ├── records/     # Expedientes
-    │   │   │   ├── consultas/
-    │   │   │   ├── tratamientos/
-    │   │   │   ├── procedimientos/
-    │   │   │   └── usuarios/    # Solo admin
-    │   │   └── shared/          # Componentes compartidos
-    │   └── styles.css
-    ├── angular.json
-    ├── package.json
-    └── tsconfig.json
+├── dentalSanFelipe-frontend/     # Aplicación Angular
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── pages/            # Páginas del sistema
+│   │   │   ├── core/             # Services, guards, interceptors
+│   │   │   └── components/       # Componentes reutilizables
+│   │   ├── index.html            # HTML principal
+│   │   └── styles.css            # Estilos globales
+│   ├── angular.json              # Configuración de Angular
+│   ├── package.json              # Dependencias del frontend
+│   └── tsconfig.json             # Configuración TypeScript
+│
+├── README.md                     # Este archivo
+├── CONFIGURACION_SESIONES.md     # Guía de configuración de sesiones
+└── .gitignore                    # Archivos ignorados por Git
 ```
 
 ---
 
-## 🔐 Seguridad
+## 🔄 Actualizar el Sistema
 
-### Producción
-- [ ] Cambiar `JWT_SECRET` y `JWT_REFRESH_SECRET` en `.env`
-- [ ] Cambiar contraseña de admin después del primer login
-- [ ] Usar HTTPS en producción
-- [ ] Configurar CORS adecuadamente
-- [ ] Cambiar credenciales de MySQL
-- [ ] Usar certificados SSL para MySQL
-- [ ] Activar rate limiting
-- [ ] Revisar logs regularmente
+Si descargas una versión más nueva del sistema:
 
-### Desarrollo
-- ✅ `.env` está en `.gitignore`
-- ✅ Contraseñas hasheadas con bcrypt
-- ✅ JWT con expiración
-- ✅ Validación de roles en backend y frontend
-- ✅ Sanitización de inputs
-
----
-
-## 🐛 Troubleshooting
-
-### Backend no inicia
+### Paso 1: Descargar Cambios
 
 ```bash
-# Verificar que MySQL esté corriendo
-docker ps
+# Guardar tus cambios locales (si los hay)
+git stash
 
-# Ver logs
-docker logs mysql_dentalsanfelipe
+# Obtener la última versión
+git pull origin main
 
-# Verificar conexión
-docker exec -it mysql_dentalsanfelipe mysql -uroot -proot -e "SHOW DATABASES;"
+# Restaurar tus cambios
+git stash pop
 ```
 
-### Frontend no puede conectarse al backend
+### Paso 2: Actualizar Dependencias
 
-1. Verifica que el backend esté corriendo en puerto 3000
-2. Revisa la consola del navegador (F12)
-3. Verifica que las URLs en los servicios sean correctas:
-   - `src/app/core/services/*.service.ts`
-   - Deben tener: `http://localhost:3000/api`
+```bash
+# Backend
+cd dentalSanFelipe-backend
+npm install
+cd ..
 
-### Errores de CORS
-
-En `server.js` del backend, asegúrate de tener:
-
-```javascript
-app.use(cors({
-  origin: 'http://localhost:4200',
-  credentials: true
-}));
+# Frontend
+cd dentalSanFelipe-frontend
+npm install
+cd ..
 ```
 
-### Worker de notificaciones no envía mensajes
+### Paso 3: Actualizar Base de Datos (si hay cambios)
 
-1. Verifica que el worker esté corriendo
-2. Revisa la consola del worker para errores
-3. Verifica que `WHATSAPP_SIMULATION_MODE` esté configurado correctamente
-4. Si es modo producción, verifica credenciales de Twilio
+Revisa si hay nuevos archivos SQL en `dentalSanFelipe-backend/src/db/` y ejecútalos.
 
----
+### Paso 4: Reiniciar Servicios
 
-## 🔒 Seguridad y Buenas Prácticas
-
-### ✅ Implementado
-- **Soft Delete**: Eliminación lógica en tablas clínicas (requisito legal)
-- **Auditoría completa**: Registro de todas las operaciones con before/after
-- **Control de acceso por rol**: Permisos granulares por endpoint
-- **Adjuntos seguros**: Almacenamiento en filesystem, NO en BD
-- **Transacciones**: Operaciones atómicas para integridad
-- **Índices optimizados**: Queries eficientes en tablas grandes
-- **JWT con refresh tokens**: Sesiones seguras de 15min + renovación
-
-### 🛡️ Permisos por Rol
-- **Administrador**: 
-  - Gestión completa de usuarios
-  - Acceso total a expedientes
-  - Configuración del sistema
-  
-- **Odontólogo**:
-  - Crear/editar/eliminar expedientes
-  - Crear/editar historia clínica
-  - Ver expedientes de otros odontólogos (solo lectura)
-  - Gestionar sus propios tratamientos
-  
-- **Auxiliar**:
-  - Ver pacientes y expedientes (solo lectura)
-  - Agendar citas
-  - No puede modificar información clínica
-
-### 📋 Auditoría
-Todas las operaciones en expedientes se registran con:
-- Usuario que realizó la acción
-- Timestamp con zona horaria
-- Estado anterior y posterior (JSON)
-- Dirección IP y User Agent
-- Tipo de acción (CREATE, UPDATE, DELETE, ACCESS)
-
-Ver detalles en: [SECURITY_AUDIT.md](./SECURITY_AUDIT.md)
+- Backend: `Ctrl + C` y luego `npm start`
+- Frontend: `Ctrl + C` y luego `npm start`
 
 ---
 
-## 📝 Tareas Pendientes / Roadmap
+## 💾 Backup de la Base de Datos
 
-### Alta Prioridad
-- [ ] Ejecutar migración 0002 (soft delete) en producción
-- [ ] Actualizar controllers para usar soft delete
-- [ ] Implementar logging automático en todos los CUD operations
-- [ ] Tests de integración para transacciones
+### Exportar (Backup)
 
-### Features
-- [ ] Implementar paginación en todas las listas
-- [ ] Agregar búsqueda avanzada de pacientes
-- [ ] Dashboard con estadísticas y gráficas
-- [ ] Reportes en PDF (expedientes, recetas)
-- [ ] Calendario visual de citas
-- [ ] Integración con servicios de pago
-- [ ] App móvil (React Native o Flutter)
-- [ ] Sistema de inventario de materiales
-- [ ] Multi-tenancy (múltiples clínicas)
-- [ ] Backup automático de base de datos
+**Docker:**
+```bash
+docker exec dental-mysql mysqldump -uroot -proot dental_sanfelipe > backup_$(date +%Y%m%d).sql
+```
 
----
+**XAMPP/Nativo:**
+```bash
+mysqldump -u root -p dental_sanfelipe > backup_20241212.sql
+```
 
-## 👥 Equipo de Desarrollo
+### Importar (Restaurar)
 
-**Roles del Sistema**:
-- Administrador: Gestión completa
-- Odontólogo: Atención clínica
-- Auxiliar: Soporte administrativo
+**Docker:**
+```bash
+docker exec -i dental-mysql mysql -uroot -proot dental_sanfelipe < backup_20241212.sql
+```
 
----
-
-## 📄 Licencia
-
-[Especifica tu licencia aquí]
+**XAMPP/Nativo:**
+```bash
+mysql -u root -p dental_sanfelipe < backup_20241212.sql
+```
 
 ---
 
 ## 📞 Soporte y Contribución
 
+### 📚 Documentación Adicional
+
+- `CONFIGURACION_SESIONES.md` - Cómo ajustar la duración de las sesiones
+- `.env.example` - Todas las variables de configuración disponibles
+
 ### 🐛 Reportar Problemas
 
 Si encuentras un error:
 
-1. **Revisa los issues existentes**: Puede que ya esté reportado
-2. **Incluye información**:
-   - Versión del sistema (git commit hash o versión)
-   - Logs relevantes (`docker-compose logs -f`)
-   - Pasos para reproducir el error
-   - Capturas de pantalla si aplica
+1. Revisa la sección [Solución de Problemas](#-solución-de-problemas)
+2. Abre un issue en GitHub incluyendo:
+   - Descripción detallada del problema
+   - Pasos para reproducirlo
+   - Logs del backend/frontend (copiar de la terminal)
+   - Sistema operativo y versiones
 
-### 🤝 Contribuir
+### 🤝 Contribuir al Proyecto
 
 ¿Quieres mejorar el sistema?
 
-1. **Fork** el repositorio
-2. **Crea una rama** para tu feature: `git checkout -b feature/nueva-funcionalidad`
-3. **Commit** tus cambios: `git commit -m 'Agrega nueva funcionalidad'`
-4. **Push** a la rama: `git push origin feature/nueva-funcionalidad`
-5. **Abre un Pull Request** describiendo los cambios
-
-### 📚 Recursos Adicionales
-
-- [WHATSAPP_CONFIG.md](./WHATSAPP_CONFIG.md) - Configuración detallada de WhatsApp
-- [DOCKER_HUB.md](./DOCKER_HUB.md) - Publicar imágenes en Docker Hub
-- [ACTIVAR_WHATSAPP.md](./ACTIVAR_WHATSAPP.md) - Guía para activar Twilio
-
-### 💬 Contacto
-
-Para preguntas o sugerencias:
-- 📧 Email: xitlalic.1403.flores@gmail.com
-- 🐙 GitHub Issues: [Abrir issue](https://github.com/xitflor41/DentalSanFelipeProject/issues)
-- 💼 LinkedIn: https://www.linkedin.com/in/xitlalic-guadalupe-flores-salcedo-b275bb2b9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
-
----
-
-## 🎉 ¡Listo para Usar!
-
-Ahora tienes un sistema completo de gestión dental con notificaciones automáticas por WhatsApp. 
-
-### 🔑 Primer Acceso
-
-- **URL**: `http://localhost:4200`
-- **Usuario**: `admin`
-- **Contraseña**: `Admin123!`
-
-> ⚠️ **IMPORTANTE**: Cambia la contraseña del administrador después del primer acceso
-
-### ✅ Verificación Post-Instalación
-
-```bash
-# 1. Verificar que todos los contenedores estén corriendo
-docker-compose ps
-
-# 2. Verificar logs sin errores
-docker-compose logs backend | grep -i error
-docker-compose logs frontend | grep -i error
-
-# 3. Probar endpoint de salud
-curl http://localhost:3000/api/health
-
-# 4. Acceder a la aplicación
-# Abre http://localhost:4200 en tu navegador
-```
-
-### 🚀 Próximos Pasos
-
-1. **Crear usuarios**: Agrega odontólogos y auxiliares desde el panel de administración
-2. **Registrar pacientes**: Comienza a cargar información de pacientes
-3. **Activar WhatsApp**: Sigue [ACTIVAR_WHATSAPP.md](./ACTIVAR_WHATSAPP.md) para notificaciones reales
-4. **Personalizar**: Ajusta el `.env` según tus necesidades
+1. Haz Fork del repositorio
+2. Crea una rama: `git checkout -b feature/nueva-funcionalidad`
+3. Realiza tus cambios
+4. Commit: `git commit -m 'Agrega nueva funcionalidad'`
+5. Push: `git push origin feature/nueva-funcionalidad`
+6. Abre un Pull Request
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto está licenciado bajo la [Licencia MIT](LICENSE) - ver el archivo LICENSE para más detalles.
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
 ---
 
 <div align="center">
 
-**Hecho con ❤️ para mejorar la gestión de clínicas dentales**
+**🦷 Sistema de Gestión Dental San Felipe**
 
-⭐ Si te gusta este proyecto, dale una estrella en GitHub
+Hecho con ❤️ para mejorar la gestión de clínicas dentales
+
+---
+
+⭐ Si este proyecto te es útil, dale una estrella en GitHub
+
+[Reportar Bug](https://github.com/TU-USUARIO/DentalSanFelipeProject/issues) • [Solicitar Feature](https://github.com/TU-USUARIO/DentalSanFelipeProject/issues) • [Ver Documentación](https://github.com/TU-USUARIO/DentalSanFelipeProject)
 
 </div>

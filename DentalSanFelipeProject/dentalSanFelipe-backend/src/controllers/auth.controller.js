@@ -5,8 +5,24 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "cambia_esto";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "refresh_secreto_cambia";
-const JWT_EXPIRES = "15m"; // 15 minutos para access token
-const JWT_REFRESH_EXPIRES = "7d"; // 7 días para refresh token
+const JWT_EXPIRES = process.env.JWT_EXPIRES_IN || "8h"; // Usar variable de entorno
+const JWT_REFRESH_EXPIRES = process.env.JWT_REFRESH_EXPIRES_IN || "7d";
+
+// Función para convertir tiempo JWT a segundos
+function jwtTimeToSeconds(time) {
+  const match = time.match(/(\d+)([smhd])/);
+  if (!match) return 3600; // default 1 hora
+  const value = parseInt(match[1]);
+  const unit = match[2];
+  
+  switch(unit) {
+    case 's': return value;
+    case 'm': return value * 60;
+    case 'h': return value * 3600;
+    case 'd': return value * 86400;
+    default: return 3600;
+  }
+}
 
 // Almacenamiento temporal de refresh tokens (en producción usa Redis)
 const refreshTokens = [];
@@ -86,7 +102,7 @@ export const login = async (req, res, next) => {
       user, 
       accessToken, 
       refreshToken,
-      expiresIn: 900 // 15 minutos en segundos
+      expiresIn: jwtTimeToSeconds(JWT_EXPIRES)
     });
   } catch (err) {
     next(err);
@@ -140,7 +156,7 @@ export const refreshToken = async (req, res, next) => {
       
       res.json({ 
         accessToken: newAccessToken,
-        expiresIn: 900
+        expiresIn: jwtTimeToSeconds(JWT_EXPIRES)
       });
     });
   } catch (err) {

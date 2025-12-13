@@ -8,9 +8,30 @@ const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
 const TWILIO_WHATSAPP_FROM = process.env.TWILIO_WHATSAPP_FROM;
 const WHATSAPP_ENABLED = process.env.WHATSAPP_ENABLED === 'true';
 
+// Validar credenciales antes de inicializar
+function isValidAccountSid(sid) {
+  return sid && sid.startsWith('AC') && sid.length === 34;
+}
+
+function isValidAuthToken(token) {
+  return token && token.length === 32;
+}
+
 let twilioClient = null;
-if (TWILIO_ACCOUNT_SID && TWILIO_AUTH_TOKEN) {
-  twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+let twilioConfigured = false;
+
+// Solo inicializar si las credenciales son válidas
+if (isValidAccountSid(TWILIO_ACCOUNT_SID) && isValidAuthToken(TWILIO_AUTH_TOKEN)) {
+  try {
+    twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+    twilioConfigured = true;
+    console.log('[WhatsApp] ✅ Cliente Twilio inicializado correctamente');
+  } catch (error) {
+    console.warn('[WhatsApp] ⚠️ Error al inicializar Twilio:', error.message);
+  }
+} else {
+  console.log('[WhatsApp] ℹ️ Twilio no configurado (usando credenciales de ejemplo)');
+  console.log('[WhatsApp] ℹ️ Para activar WhatsApp real, consulta ACTIVAR_WHATSAPP.md');
 }
 
 /**
@@ -34,16 +55,14 @@ function formatWhatsAppNumber(telefono) {
  * Envía mensaje por WhatsApp usando Twilio
  */
 export async function sendWhatsAppMessage(telefono, mensaje) {
-  if (!WHATSAPP_ENABLED) {
-    console.log('[WhatsApp DISABLED] Mensaje simulado:');
-    console.log('Para:', telefono);
-    console.log('Mensaje:', mensaje);
+  // Modo simulado o Twilio no configurado
+  if (!WHATSAPP_ENABLED || !twilioConfigured) {
+    const reason = !WHATSAPP_ENABLED ? 'WHATSAPP_ENABLED=false' : 'Credenciales Twilio inválidas';
+    console.log(`[WhatsApp] 📱 Mensaje simulado (${reason}):`);
+    console.log('  Para:', telefono);
+    console.log('  Mensaje:', mensaje);
+    console.log('  💡 Para activar WhatsApp real, consulta ACTIVAR_WHATSAPP.md');
     return { success: true, simulated: true };
-  }
-
-  if (!twilioClient) {
-    console.error('[WhatsApp] Twilio no configurado');
-    throw new Error('Twilio no configurado. Verifica TWILIO_ACCOUNT_SID y TWILIO_AUTH_TOKEN');
   }
 
   try {
@@ -55,10 +74,10 @@ export async function sendWhatsAppMessage(telefono, mensaje) {
       body: mensaje
     });
 
-    console.log('[WhatsApp] Mensaje enviado:', message.sid);
+    console.log('[WhatsApp] ✅ Mensaje enviado:', message.sid);
     return { success: true, messageId: message.sid };
   } catch (error) {
-    console.error('[WhatsApp] Error:', error.message);
+    console.error('[WhatsApp] ❌ Error:', error.message);
     throw error;
   }
 }

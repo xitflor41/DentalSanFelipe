@@ -252,8 +252,12 @@ export const upsertHistoriaByPaciente = async (req, res, next) => {
       [id_paciente]
     );
 
+    let id_historiaClinica;
+
     if (existing.length > 0) {
-      // Actualizar
+      // Actualizar historia existente
+      id_historiaClinica = existing[0].id_historiaClinica;
+      
       await pool.query(
         `UPDATE historia_clinica SET 
           antecedentesFam = ?, 
@@ -265,13 +269,9 @@ export const upsertHistoriaByPaciente = async (req, res, next) => {
         [antecedentesFam, antecedentesPrsnls, padecimientosPrevios, factorRiesgo, alergias, id_paciente]
       );
 
-      res.json({ 
-        message: "Historia clínica actualizada", 
-        id_historiaClinica: existing[0].id_historiaClinica,
-        id_paciente 
-      });
+      console.log(`[Historia] Actualizada historia #${id_historiaClinica} para paciente #${id_paciente}`);
     } else {
-      // Crear nueva
+      // Crear nueva historia
       const [result] = await pool.query(
         `INSERT INTO historia_clinica 
           (id_paciente, antecedentesFam, antecedentesPrsnls, padecimientosPrevios, factorRiesgo, alergias) 
@@ -279,12 +279,27 @@ export const upsertHistoriaByPaciente = async (req, res, next) => {
         [id_paciente, antecedentesFam, antecedentesPrsnls, padecimientosPrevios, factorRiesgo, alergias]
       );
 
-      res.status(201).json({ 
-        message: "Historia clínica creada", 
-        id_historiaClinica: result.insertId,
-        id_paciente 
-      });
+      id_historiaClinica = result.insertId;
+      console.log(`[Historia] Creada historia #${id_historiaClinica} para paciente #${id_paciente}`);
     }
+
+    // CRÍTICO: Vincular la historia clínica al expediente del paciente
+    await pool.query(
+      `UPDATE expedientes SET id_historiaClinica = ? WHERE id_paciente = ?`,
+      [id_historiaClinica, id_paciente]
+    );
+    console.log(`[Historia] Vinculada historia #${id_historiaClinica} al expediente del paciente #${id_paciente}`);
+
+    // Retornar la historia completa
+    const [historiaCompleta] = await pool.query(
+      "SELECT * FROM historia_clinica WHERE id_historiaClinica = ?",
+      [id_historiaClinica]
+    );
+
+    res.status(existing.length > 0 ? 200 : 201).json({ 
+      message: existing.length > 0 ? "Historia clínica actualizada" : "Historia clínica creada", 
+      historia: historiaCompleta[0]
+    });
   } catch (err) {
     next(err);
   }

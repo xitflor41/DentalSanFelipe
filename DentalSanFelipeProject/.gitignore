@@ -1,0 +1,47 @@
+# ==========================================
+# SISTEMA DE GESTIÓN DENTAL SAN FELIPE
+# ==========================================
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment variables (IMPORTANTE: nunca subir credenciales)
+.env
+.env.local
+.env.production
+
+# Backups de base de datos
+*.sql
+!dentalSanFelipe-backend/src/db/dental_sanfelipe.sql
+
+# Archivos subidos por usuarios
+dentalSanFelipe-backend/uploads/adjuntos/*
+!dentalSanFelipe-backend/uploads/adjuntos/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# README backup
+README_OLD.md
+
+# Archivos temporales
+tmp/
+temp/
+*.tmp
